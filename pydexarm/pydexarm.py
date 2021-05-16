@@ -161,6 +161,21 @@ class Dexarm:
                 if serial_str.find("ok") > -1:
                     return x, y, z, e, a, b, c
 
+    def get_encoder_position(self):
+        """
+        Get current encoder position
+        """
+        self.ser.reset_input_buffer()
+        self.ser.write('M893\r'.encode())
+        while True:
+            serial_str = self.ser.readline().decode("utf-8")
+            if len(serial_str) > 0:
+                x, y, z = re.match(r".*X(\d+) Y(\d+) Z(\d+)", serial_str).groups()
+                return x, y, z
+
+    def stop(self):
+        self._send_cmd("G004\r")
+
     def dealy_ms(self, value):
         """
         Pauses the command queue and waits for a period of time in ms
