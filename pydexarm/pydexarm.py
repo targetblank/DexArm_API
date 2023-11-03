@@ -32,13 +32,16 @@ class Dexarm:
             self.ser.reset_input_buffer()
             return
         while True:
-            serial_str = self.ser.readline().decode("utf-8")
-            if len(serial_str) > 0:
-                if serial_str.find("ok") > -1:
-                    print("read ok")
-                    break
-                else:
-                    print("read：", serial_str)
+            try:
+                serial_str = self.ser.readline().decode("utf-8")
+                if len(serial_str) > 0:
+                    if serial_str.find("ok") > -1:
+                        print("read ok")
+                        break
+                    else:
+                        print("read：", serial_str)
+            except UnicodeDecodeError:
+                print("UnicodeDecodeError")
 
     def go_home(self):
         """
